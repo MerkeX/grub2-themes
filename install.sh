@@ -1,5 +1,12 @@
 #! /usr/bin/env bash
 
+# Define which command to use for ImageMagick
+if command -v magick &> /dev/null; then
+  _MAGICK="magick"
+else
+  _MAGICK="convert"
+fi
+
 # Exit Immediately if a command fails
 set -o errexit
 
@@ -127,7 +134,7 @@ generate() {
     sed -i "s/[0-9]\+x[0-9]\+/${custom_resolution}/" "${THEME_DIR}/${theme}/theme.txt"
     # Use appropriate background as base and resize it
     cp -a --no-preserve=ownership "${REO_DIR}/backgrounds/${asset_type}/background-${theme}.jpg" "${THEME_DIR}/${theme}/background.jpg"
-    magick "${THEME_DIR}/${theme}/background.jpg" -resize ${custom_resolution}^ -gravity center -extent ${custom_resolution} "${THEME_DIR}/${theme}/background.jpg"
+    "${_MAGICK}" "${THEME_DIR}/${theme}/background.jpg" -resize ${custom_resolution}^ -gravity center -extent ${custom_resolution} "${THEME_DIR}/${theme}/background.jpg"
   else
     cp -a --no-preserve=ownership "${REO_DIR}/config/theme-${screen}.txt" "${THEME_DIR}/${theme}/theme.txt"
     cp -a --no-preserve=ownership "${REO_DIR}/backgrounds/${screen}/background-${theme}.jpg" "${THEME_DIR}/${theme}/background.jpg"
@@ -142,7 +149,7 @@ generate() {
     fi
     prompt -w "\n Using custom background.jpg as grub background image..."
     cp -a --no-preserve=ownership "${REO_DIR}/background.jpg" "${THEME_DIR}/${theme}/background.jpg"
-    magick "${THEME_DIR}/${theme}/background.jpg" -auto-orient "${THEME_DIR}/${theme}/background.jpg"
+     "${_MAGICK}" "${THEME_DIR}/${theme}/background.jpg" -auto-orient "${THEME_DIR}/${theme}/background.jpg"
   fi
 
   # Determine which assets to use based on custom resolution or screen
