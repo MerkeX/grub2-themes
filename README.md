@@ -98,6 +98,27 @@ After that, you can configure the theme as shown below. In this example it is in
    - Make sure to replace `[YOUR_RESOLUTION]` with your resolution and `[THEME]` with the theme
  - Alternatively, use the `-c` option to set a custom resolution
 
+### Fonts:
+GRUB themes use the PF2 font format. GRUB rasterizes a TrueType or OpenType
+font when `grub-mkfont` creates a PF2 file, so the source font must be converted
+for each size used by the theme. The bundled themes use the DejaVu Sans files
+from `common/DejaVuSans.ttf`; Unifont is also included for broad Unicode
+coverage.
+
+To regenerate the bundled fonts, run:
+```sh
+cd common
+./makefont.sh
+```
+
+The script supports both command names used by Linux distributions:
+`grub-mkfont` (including NixOS) and `grub2-mkfont` (including Fedora and
+openSUSE). To convert another font, pass its path, an output prefix, and
+optional sizes:
+```sh
+./makefont.sh /path/to/MyFont.ttf my-font 16 24 32
+```
+
 ## Contributing:
  - If you made changes to icons, or added a new one:
    - Delete the existing icon, if there is one
